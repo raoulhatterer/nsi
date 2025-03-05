@@ -1,0 +1,2556 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cours et exercices de première en spécialité NSI">
+      
+      
+        <meta name="author" content="R. Hatterer">
+      
+      
+        <link rel="canonical" href="https://raoulhatterer.github.io/tnsi/T5_Architecture_materielle/5.0_Autour_de_GNU_Linux/cours/">
+      
+      <link rel="icon" href="../../../xtra/favTNSI.png">
+      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.3">
+    
+    
+      
+        <title>5.0 OS & GNU/Linux - Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.js"></script>
+<script src="https://raoulhatterer.github.io/tnsi//js/sqlite_ide.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/sql/sql.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.css"><link rel="stylesheet" href="https://raoulhatterer.github.io/tnsi//css/sqlite_ide.css"><script>path="https://raoulhatterer.github.io/tnsi/"</script>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a952b86.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+    <script src="../../../xtra/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../../xtra/gifplayer/gif-player.es6.js" defer async></script>
+    <!-- Load CDNs : Pyodide (Python in WASM), Ace (Editor) and JQuery (Terminal) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.17.0/full/pyodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.17.0/full/pyodide.asm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal@2.23.0/js/jquery.terminal.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/jquery.terminal@2.23.0/css/jquery.terminal.min.css" rel="stylesheet">
+
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../../xtra/pyoditeur.css">
+    
+      <link rel="stylesheet" href="../../../xtra/ajustements.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#os-gnulinux" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../../.." title="Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)" class="md-header__button md-logo" aria-label="Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2M7.4 20C5.9 18.6 5 16.6 5 14.5s.9-4.1 2.4-5.5l1.6.6c-1.3 1.1-2 3-2 4.9s.7 3.7 2 4.9l-1.6.6m5.3-2-.8-2-1.4 2H9l2.3-3.1L10 12h1.3l.8 2 1.4-2H15l-2.2 3 1.3 3h-1.4m3.9 2-1.6-.6c1.3-1.2 2-3 2-4.9s-.7-3.7-2-4.9l1.6-.6c1.5 1.4 2.4 3.4 2.4 5.5s-.9 4.1-2.4 5.5M21 7H3V4h18v3Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5.0 OS & GNU/Linux
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-label="Passer au mode nuit"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Passer au mode nuit" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="blue"  aria-label="Passer au mode jour"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Passer au mode jour" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Accueil
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../progression_et_devoirs/" class="md-tabs__link">
+      Progression et devoirs
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../T1_Structures_de_donnees/sommaire/" class="md-tabs__link">
+        T1 Structures de données
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../T2_Programmation/sommaire/" class="md-tabs__link">
+        T2 Programmation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../T3_Algorithmique/sommaire/" class="md-tabs__link">
+        T3 Algorithmique
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../T4_Bases_de_donnees/sommaire/" class="md-tabs__link">
+        T4 Base de données
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../sommaire/" class="md-tabs__link md-tabs__link--active">
+        T5 Arch. matérielle
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../T6_5_algos_coeur/algos/cours/" class="md-tabs__link">
+      Algorithmes de référence
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../T6_6_Epreuve_pratique/BNS_2024/" class="md-tabs__link">
+        💻 Épreuve Pratique
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../remerciements/" class="md-tabs__link">
+      Remerciements
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../T7_Divers/10_orientation/cours/" class="md-tabs__link">
+        Divers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../T8_Projets" class="md-tabs__link">
+      Projets
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)" class="md-nav__button md-logo" aria-label="Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2M7.4 20C5.9 18.6 5 16.6 5 14.5s.9-4.1 2.4-5.5l1.6.6c-1.3 1.1-2 3-2 4.9s.7 3.7 2 4.9l-1.6.6m5.3-2-.8-2-1.4 2H9l2.3-3.1L10 12h1.3l.8 2 1.4-2H15l-2.2 3 1.3 3h-1.4m3.9 2-1.6-.6c1.3-1.2 2-3 2-4.9s-.7-3.7-2-4.9l1.6-.6c1.5 1.4 2.4 3.4 2.4 5.5s-.9 4.1-2.4 5.5M21 7H3V4h18v3Z"/></svg>
+
+    </a>
+    Terminale Spécialité NSI (Lycée de la méditerranée La Ciotat)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Accueil
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../progression_et_devoirs/" class="md-nav__link">
+        Progression et devoirs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          T1 Structures de données
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="T1 Structures de données" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          T1 Structures de données
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/sommaire/" class="md-nav__link">
+        Sommaire
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          1.1 Listes Piles Files
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="1.1 Listes Piles Files" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          1.1 Listes Piles Files
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.1_Listes_Piles_Files/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.1_Listes_Piles_Files/Exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          1.2 Dictionnaires
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="1.2 Dictionnaires" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          1.2 Dictionnaires
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.2_Dictionnaires/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.2_Dictionnaires/exercices/" class="md-nav__link">
+        Exercice
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_4">
+          1.3 Arbres
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="1.3 Arbres" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_4">
+          <span class="md-nav__icon md-icon"></span>
+          1.3 Arbres
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.3_Arbres/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.3_Arbres/exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_5" type="checkbox" id="__nav_3_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_5">
+          1.4 Graphes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="1.4 Graphes" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_5">
+          <span class="md-nav__icon md-icon"></span>
+          1.4 Graphes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.4_Graphes/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T1_Structures_de_donnees/1.4_Graphes/TP_Labyrinthe/" class="md-nav__link">
+        TP Labyrinthe
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          T2 Programmation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="T2 Programmation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          T2 Programmation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/sommaire/" class="md-nav__link">
+        Sommaire
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2">
+          2.1 Programmation Orientee Objet
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="2.1 Programmation Orientee Objet" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          2.1 Programmation Orientee Objet
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.1_Programmation_Orientee_Objet/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.1_Programmation_Orientee_Objet/TP/" class="md-nav__link">
+        TP : balles rebondissantes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.1_Programmation_Orientee_Objet/z_Exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3">
+          2.2 Recursivite
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="2.2 Recursivite" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          2.2 Recursivite
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.2_Recursivite/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.2_Recursivite/2_Exercices_recursivite/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.3_Calculabilite_Decidabilite/cours/" class="md-nav__link">
+        Décidabilité, calculabilité
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T2_Programmation/2.4_Pratiques_de_programmation/cours/" class="md-nav__link">
+        Bonnes pratiques
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          T3 Algorithmique
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="T3 Algorithmique" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          T3 Algorithmique
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/sommaire/" class="md-nav__link">
+        Sommaire
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2">
+          3.1 Diviser pour regner
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="3.1 Diviser pour regner" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          3.1 Diviser pour regner
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.1_Diviser_pour_regner/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.1_Diviser_pour_regner/exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          3.2 Programmation dynamique
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="3.2 Programmation dynamique" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          3.2 Programmation dynamique
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.2_Programmation_dynamique/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.2_Programmation_dynamique/TP_pyramides/" class="md-nav__link">
+        TP Pyramides
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.2_Programmation_dynamique/TP_rendu_monnaie/" class="md-nav__link">
+        TP Rendu de monnaie
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.2_Programmation_dynamique/TP_carre_blanc/" class="md-nav__link">
+        TP Le plus grand carré blanc
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T3_Algorithmique/3.3_Recherche_textuelle/cours/" class="md-nav__link">
+        Recherche textuelle
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          T4 Base de données
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="T4 Base de données" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          T4 Base de données
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/sommaire/" class="md-nav__link">
+        Sommaire
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_2" type="checkbox" id="__nav_6_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2">
+          4.1 Modele relationnel
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="4.1 Modele relationnel" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_2">
+          <span class="md-nav__icon md-icon"></span>
+          4.1 Modele relationnel
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/4.1_Modele_relationnel/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/4.1_Modele_relationnel/exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_3" type="checkbox" id="__nav_6_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3">
+          4.2 Langage SQL
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="4.2 Langage SQL" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_3">
+          <span class="md-nav__icon md-icon"></span>
+          4.2 Langage SQL
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/4.2_Langage_SQL/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/4.2_Langage_SQL/02_exercices_inter/" class="md-nav__link">
+        Exercices SQL interactifs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/4.2_Langage_SQL/02_exercices_ecrit/" class="md-nav__link">
+        Exercices SQL débranchés
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T4_Bases_de_donnees/4.2_Langage_SQL/03_python_et_SQL/" class="md-nav__link">
+        Exercices Python-SQL
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          T5 Arch. matérielle
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="T5 Arch. matérielle" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          T5 Arch. matérielle
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sommaire/" class="md-nav__link">
+        Sommaire
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          5.0 OS & GNU/Linux
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        5.0 OS & GNU/Linux
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-systemes-dexploitations" class="md-nav__link">
+    1. Systèmes d'exploitations :
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Systèmes d'exploitations :">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-definition-et-historique" class="md-nav__link">
+    1.1. Définition et historique
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-gnulinux" class="md-nav__link">
+    1.2 GNU/Linux
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ou-pratiquer" class="md-nav__link">
+    2. Où pratiquer ?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-le-shell-linux" class="md-nav__link">
+    3. Le Shell Linux
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Le Shell Linux">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-bash" class="md-nav__link">
+    3.1. Bash
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-le-systeme-de-fichiers" class="md-nav__link">
+    3.2. Le système de fichiers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-les-utilisateurs-et-les-droits" class="md-nav__link">
+    3.3. Les utilisateurs et les droits
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-les-principales-commandes-shell-sous-linux" class="md-nav__link">
+    3.4. Les principales commandes Shell sous Linux
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.1_Systemes_sur_puce/cours/" class="md-nav__link">
+        5.1 Systèmes sur puce
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4">
+          5.2 Gestion des processus
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5.2 Gestion des processus" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          5.2 Gestion des processus
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.2_Gestion_des_processus/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.2_Gestion_des_processus/Exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_5">
+          5.3 Protocoles de routage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5.3 Protocoles de routage" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          5.3 Protocoles de routage
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.3_Protocoles_de_routage/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.3_Protocoles_de_routage/Exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_6">
+          5.4 Cryptographie
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5.4 Cryptographie" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          5.4 Cryptographie
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.4_Cryptographie/cours/" class="md-nav__link">
+        Cours
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../5.4_Cryptographie/Exercices/" class="md-nav__link">
+        Exercices
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T6_5_algos_coeur/algos/cours/" class="md-nav__link">
+        Algorithmes de référence
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          💻 Épreuve Pratique
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="💻 Épreuve Pratique" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          💻 Épreuve Pratique
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T6_6_Epreuve_pratique/BNS_2024/" class="md-nav__link">
+        BNS 2024
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T6_6_Epreuve_pratique/BNS_2023/" class="md-nav__link">
+        (!!! old !!!) BNS 2023
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T6_6_Epreuve_pratique/BNS_2022/" class="md-nav__link">
+        (!!! old !!!) BNS 2022
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T6_6_Epreuve_pratique/BNS_2021/" class="md-nav__link">
+        (!!! old !!!) BNS 2021
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../remerciements/" class="md-nav__link">
+        Remerciements
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_11">
+          Divers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Divers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Divers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/10_orientation/cours/" class="md-nav__link">
+        Orientation Post-Bac
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/1_Conseils_generaux/cours/" class="md-nav__link">
+        Conseils de travail
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/3_IDE/cours/" class="md-nav__link">
+        IDE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/4_Processing/cours/" class="md-nav__link">
+        Processing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/5_Capytale/cours/" class="md-nav__link">
+        Utilisation du service Capytale
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/6_Pygame/05_Initiation_Pygame/" class="md-nav__link">
+        Initiation à Pygame
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/7_Liens/liens/" class="md-nav__link">
+        Liens utiles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T7_Divers/8_Mkdocs/mkdocs/" class="md-nav__link">
+        MkDocs
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../T8_Projets" class="md-nav__link">
+        Projets
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+    
+                  
+
+  <a href="tree/main/docs/T5_Architecture_materielle/5.0_Autour_de_GNU_Linux/cours.md" title="Editer cette page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="os-gnulinux">OS &amp; GNU/Linux<a class="headerlink" href="#os-gnulinux" title="Permanent link">⚓︎</a></h1>
+<h2 id="1-systemes-dexploitations">1. Systèmes d'exploitations :<a class="headerlink" href="#1-systemes-dexploitations" title="Permanent link">⚓︎</a></h2>
+<h3 id="11-definition-et-historique">1.1. Définition et historique<a class="headerlink" href="#11-definition-et-historique" title="Permanent link">⚓︎</a></h3>
+<div class="admonition quote">
+<p class="admonition-title">D'après la définition de Wikipedia </p>
+<p>« En informatique, un <a href="https://fr.wikipedia.org/wiki/Système_d%27exploitation" target="_blank">système d'exploitation</a> (souvent appelé OS — de l'anglais <strong>O</strong>perating <strong>S</strong>ystem) est un ensemble de programmes qui dirige l'utilisation des ressources d'un ordinateur par des logiciels applicatifs.</p>
+<p>Il reçoit des demandes d'utilisation des ressources de l'ordinateur — ressources de stockage des mémoires (par exemple des accès à la mémoire vive, aux disques durs), ressources de calcul du processeur central, ressources de communication vers des périphériques [...] ou via le réseau — de la part des logiciels applicatifs. Le système d'exploitation gère les demandes ainsi que les ressources nécessaires évitant les interférences entre les logiciels. »</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Historique</p>
+<p>Les années 1960 ont constitué un tournant pour les système d'exploitation. Au <em>MIT</em> (Massachusset Institute of Technology), le système d'exploitation <strong>CTTS</strong> (Compatible Time Sharing System) est publié en 1961. C'est l'un des tout premiers système d'exploitation <strong>à temps partagé</strong>, permettant à plusieurs utilisateurs d'utiliser <strong>un ordinateur en même temps</strong>. Cette apparente simultanéité dans l'exécution des programmes a permis de se diriger vers l'informatique moderne.</p>
+<p>Le <em>MIT</em> s'associa aux laboratoires <em>BELL</em> et à <em>General Electric</em> pour créer <strong>Multics</strong> qui était un système innovant, héritant de <strong>CTTS</strong>. C'était l'un des premier système d'exploitation avec système de fichier hiérarchique, temps partagé, multitâche préemptif (c'est- à-dire la capacité d'arrêter ou d'exécuter une tâche planifiée en cours), multiutilisateur, avec une prise en compte de la sécurité. La première version sortit en 1965.</p>
+<p>En 1969, les laboratoires <em>BELL</em> sortirent du projet et deux de leurs plus brillants informaticiens, <a href="https://fr.wikipedia.org/wiki/Ken_Thompson">Ken THOMPSON</a> et <a href="https://fr.wikipedia.org/wiki/Dennis_Ritchie">Dennis RITCHIE</a> qui avaient travaillé sur le projet <em>Multics</em> en conçurent une version simplifiée (ils considéraient <em>Multics</em> inutilement complexe) qu'ils nommèrent initialement UNICS (UNiplexed Information and Computing Service) puis <strong>UNIX</strong>. L'informatique moderne était née !</p>
+<p>Au fil des années, des surcouches de plus en plus complexes sont ajoutées aux systèmes d'exploitations afin de gérer par exemple les entrées claviers, puis souris, et une interface graphique est ajoutée, simplifiant la tâche pour l'utilisateur.</p>
+</div>
+<p>Chaque ordinateur doit donc disposer d'un OS afin de pouvoir faire fonctionner les différents logiciels en parallèle. Historiquement, chaque fabriquant d'ordinateur a développé en partie son OS. On pourra, de manière non-exhaustive, citer :</p>
+<ul>
+<li><em>OS/360</em> par <em>IBM</em>, en 1968 ;</li>
+<li><em>DOS</em> par <em>Microsoft</em> en 1981 ;</li>
+<li><em>Mac OS</em> par <em>Apple</em> en 1984 ;</li>
+<li><em>Windows 3.X</em> par <em>Microsoft</em> en 1990 ; </li>
+<li><strong>GNU/Linux</strong> par la communauté en 1991 ; </li>
+<li><em>Android</em> par <em>Google</em> en 2007 ;</li>
+<li><em>iOS</em> par <em>Apple</em> en 2007.</li>
+</ul>
+<h3 id="12-gnulinux">1.2 GNU/Linux<a class="headerlink" href="#12-gnulinux" title="Permanent link">⚓︎</a></h3>
+<p>En 1985, <a href="https://fr.wikipedia.org/wiki/Richard_Stallman" target="_blank">Richard Stallman</a> quitte le MIT pour écrire un système d'exploitation compatible Unix : <a href="https://fr.wikipedia.org/wiki/GNU" target="_blank">GNU</a> (<strong>G</strong>nu is <strong>N</strong>ot <strong>U</strong>nix). Opposé au principe du logiciel « propriétaire », il publie le manifeste GNU, où il expose ses  idées de <a href="https://fr.wikipedia.org/wiki/Logiciel_libre" target="_blank">logiciel libre</a>, permettant à chacun de s'approprier, de modifier et de diffuser le code source d'un logiciel.</p>
+<div class="admonition abstract">
+<p class="admonition-title">Exercice  1</p>
+<p>Se rendre sur <a href="https://fr.wikipedia.org/wiki/Logiciel_libre" target="_blank">Wikipédia</a> et expliquer pourquoi il ne faut pas confondre les termes suivants: </p>
+<ul>
+<li>logiciel libre (free software, libre software ou libreware) ;</li>
+<li>gratuiciels (freewares) ;</li>
+<li>open source.</li>
+</ul>
+</div>
+<p>En 1991, <a href="https://fr.wikipedia.org/wiki/Linus_Torvalds" target="_blank">Linus Torvalds</a>, étudiant norvégien de 21 ans, indisposé par la faible disponibilité de serveur UNIX de l'université d'Helsinki décide d'écrire un mini OS dérivé d'Unix pour son PC. Il écrit un <a href="https://fr.wikipedia.org/wiki/Noyau_de_système_d%27exploitation" target="_blank">noyau</a> auquel il adapte de nombreux composants disponibles du <a href="https://fr.wikipedia.org/wiki/Projet_GNU" target="_blank">projet GNU</a>. Réputé pour sa stabilité (mais aussi pour sa complexité d'installation), <a href="https://fr.wikipedia.org/wiki/Linux" target="_blank"> GNU/Linux</a> appelé communément <strong><a href="https://fr.wikipedia.org/wiki/Linux" target="_blank">Linux</a></strong> est adopté par une grande communauté de bidouilleurs (<a href="https://fr.wikipedia.org/wiki/Hacker_(sous-culture)" target="_blank">hacker</a>) sur l'internet, qui étendent régulièrement ses possibilités. Sans publicité, soutenu par la communauté du libre et de l'<a href="https://fr.wikipedia.org/wiki/Open_source" target="_blank">open-source</a>, <em>Linux</em> se répand doucement et devient rapidement une alternative crédible à <em>Windows</em>, à tel point que 90 % des serveurs du cloud sont des serveurs <em>Linux</em>. Linus Torvalds continue à diriger le développement de <em>Linux</em>, et est considéré comme le « dictateur bienveillant à vie » (Benevolent Dictator for Life) de celui-ci.</p>
+<p>Si, à l'origine, <em>Linux</em> a été développé pour les ordinateurs compatibles PC, il n'a jamais équipé qu'une très faible part des ordinateurs personnels. Mais le <em><a href="https://fr.wikipedia.org/wiki/Noyau_Linux" target="_blank">noyau Linux</a></em>, accompagné ou non des <em>logiciels GNU</em>, est également utilisé par d'autres types de systèmes informatiques, notamment les serveurs, téléphones portables, systèmes embarqués ou encore superordinateurs. Le système d'exploitation pour téléphones portables <em>Android</em> qui utilise le noyau <em>Linux</em> (mais pas <em>GNU</em>) équipe aujourd'hui 85 % des tablettes tactiles et smartphones.</p>
+<h2 id="2-ou-pratiquer">2. Où pratiquer ?<a class="headerlink" href="#2-ou-pratiquer" title="Permanent link">⚓︎</a></h2>
+<p>Si vous utilisez déjà <code>Linux</code> ou un mac vous n'avez rien à installer. Sinon, pour faire vos premiers pas, selon les modalités à votre disposition, vous avez les solutions suivantes:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">En ligne</label><label for="__tabbed_1_2">Avec WSL</label><label for="__tabbed_1_3">Sur Raspberry Pi</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li>Le site <a href="https://www.pythonanywhere.com" target="_blank">https://www.pythonanywhere.com</a> permet de créer un compte gratuit pour programmer en <em>python</em> ou pour disposer d'un <a href="https://fr.wikipedia.org/wiki/Terminal_(informatique)" target="_blank">terminal</a> sous <em>Linux</em>.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>
+<ul>
+<li><strong>Windows Subsystem for Linux (WSL)</strong> est une couche de compatibilité permettant d'exécuter des exécutables binaires <em>Linux</em> de manière native sur les dernières versions de Windows (à partir de windows 10). La version WSL 2,sortie en mai 2019, introduit la présence d'un véritable noyau <em>Linux</em>.</li>
+</ul>
+<p><strong>Installation sur WSL</strong></p>
+<ul>
+<li>Pour installer la distribution Ubuntu, lancer l'invite de commande windows, puis :
+<div class="highlight"><pre><span></span><code>wsl<span class="w"> </span>-install<span class="w"> </span>-d<span class="w"> </span>Ubuntu
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>Utilisation de WSL</strong></p>
+<ul>
+<li>Une fois installé, vous avez accès à la distribution depuis l'invite de commande windows par l'intermédiaire de la commande <code>wsl</code>.</li>
+<li>Vous accédez alors à un terminal <em>Linux</em> tout ce qui est des plus classique</li>
+<li>Le prompt est de la forme <code>nom_utilisateur@nom_machine : chemin_dossier_courant $</code>.</li>
+<li>Normalement, votre répertoire courant est symbolisé par <code>~</code> , ce qui est un raccourci pour symboliser le répertoire personnel de l'utilisateur.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><strong>Installation sur Raspberry Pi 4</strong><ul>
+<li>Il existe des distributions <em>Linux</em> spécifiques pour Rasberry 4, mais nous utiliserons <strong>Raspberry Pi OS</strong> (anciennement connu sous le nom de <strong>Raspbian</strong>), qui est une distribution basée sur <strong>Linux Debian</strong> spécialement optimisé pour Rasberry Pi. </li>
+<li>Une image est téléchargeable <a href="https://www.raspberrypi.com/software/" target="_blank">ici</a></li>
+<li>Une fois l'image installée sur une carte micro-SD, le mini-ordinateur devrait-être immédiatement fonctionnel.</li>
+</ul>
+</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Exercice</p>
+<p>Suivez toutes les étapes d'installation de l'OS <strong>Raspebbry Pi OS</strong>, en créant un utilisateur administrateur avec votre nom de famille + première lettre de votre prénom, et un <strong>mot de passe simple</strong>.</p>
+</div>
+<ul>
+<li><strong>Le terminal</strong><ul>
+<li>Pour obtenir la ligne de commande dans Raspbian, il faut lancer le programme <code>Terminal</code>.</li>
+<li>Le prompt est de la forme <code>nom_utilisateur@nom_machine : chemin_dossier_courant $</code> .</li>
+<li>Normalement, votre répertoire courant est symbolisé par <code>~</code> , ce qui est un raccourci pour symboliser le répertoire personnel de l'utilisateur.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<h2 id="3-le-shell-linux">3. Le Shell Linux<a class="headerlink" href="#3-le-shell-linux" title="Permanent link">⚓︎</a></h2>
+<h3 id="31-bash">3.1. Bash<a class="headerlink" href="#31-bash" title="Permanent link">⚓︎</a></h3>
+<p><strong>Bash</strong> (acronyme de Bourne-Again shell) est un interpréteur en ligne de commande de type script. C’est le shell Unix(l'interpréteur de commande) du projet GNU.</p>
+<p><a href="https://fr.wikipedia.org/wiki/Terminal_(informatique)" target="_blank">Le terminal</a> fonctionne avec le principe <strong>REPL</strong> : Read Eval Print Loop.</p>
+<ul>
+<li><strong>Read</strong>: L’utilisateur tape une commande qui est lue par l’interpréteur,</li>
+<li><strong>Eval</strong>: Cette commande est exécutée et retourne une chaîne de caractères,</li>
+<li><strong>Print</strong>: La chaîne de caractères est affichée à l’écran,</li>
+<li><strong>Loop</strong>: On recommence.</li>
+</ul>
+<p>Comme tous les interpréteurs en ligne de commande de type script, <em>Bash</em> exécute quatre opérations fondamentales:</p>
+<ul>
+<li>
+<p>Il fournit une liste de commandes permettant d’opérer sur l’ordinateur (lancement de programmes, copie de fichiers, etc.) et il permet de regrouper ces commandes dans un fichier unique appelé <a href="https://fr.wikipedia.org/wiki/Langage_de_script" target="_blank">script</a> ;</p>
+</li>
+<li>
+<p>Il vérifie la ligne de commande lors de son exécution ou lors d’une éventuelle procédure de vérification et renvoie un message d’erreur en cas d’erreur de syntaxe ;</p>
+</li>
+<li>
+<p>En cas de validation, chaque ligne de commande est interprétée, c’est-à-dire traduite dans un langage compréhensible par le système d’exploitation qui l’exécute alors.</p>
+</li>
+<li>
+<p>Les scripts sont de courts programmes généralement faciles à construire. <em>Bash</em> offre un service de gestion de flux, c’est-à-dire qu’il permet que le résultat d’un script (la sortie) soit transmis à un autre script (l’entrée). De cette façon, les scripts peuvent être « chaînés », chacun effectuant une seule tâche bien délimitée.</p>
+</li>
+</ul>
+<p>Les scripts peuvent être exécutés manuellement par l’utilisateur ou automatiquement par le système. Par exemple, dans la distribution <em>GNU/Linux Ubuntu</em>, le répertoire <code>resume.d</code> contient un certain nombre de scripts qui s’exécutent automatiquement lors du redémarrage du système, c’est-à-dire après la fin de la mise en veille de celui-ci. Ces scripts servent à relancer les différents programmes interrompus par la mise en veille.</p>
+<h3 id="32-le-systeme-de-fichiers">3.2. Le système de fichiers<a class="headerlink" href="#32-le-systeme-de-fichiers" title="Permanent link">⚓︎</a></h3>
+<p>Sur un système <em>Linux</em>, <strong>tout est un fichier</strong>, y compris un dossier. Mais pour rester compatible avec l'arborescence classique de windows, nous parlerons donc de :</p>
+<ul>
+<li><strong>fichier</strong> lorsqu'il s'agit d'une feuille de l'arborescence ; </li>
+<li><strong>dossier</strong> lorsqu'on parle d'un nœud ayant des enfants.</li>
+</ul>
+<p>Pour naviguer dans l'arborescence, il est nécessaire de connaître deux commandes:</p>
+<ol>
+<li>
+<p>la commande <code>ls</code>  pour <em>List</em>, qui permet de lister tous les enfants du répertoire courant dans l'arborescence et peut utiliser les options suivantes :</p>
+<ul>
+<li><code>ls -a</code> affiche les fichiers cachés;</li>
+<li><code>ls -R</code> afiche tous les fichiers dans les sous-répertoires(de manière <strong>récursive</strong>);</li>
+<li><code>ls -l</code> affichera les détails des fichiers (autorisations, taille, propriétaires, etc...).</li>
+</ul>
+</li>
+<li>
+<p>la commande <code>cd</code> pour <em>Change Directory</em>, qui peut s'utiliser selon les manières suivantes :</p>
+<ul>
+<li><code>cd ~</code>, ramène au répertoire de l'utilisateur courant;</li>
+<li><code>cd nom_du_repertoire_enfant</code>, qui déplace le prompt dans le répertoire enfant sélectionné (adressage relatif); </li>
+<li><code>cd /chemin/absolu/vers/un répertoire</code>, qui déplace vers le répertoire cible (adressage absolu);</li>
+<li><code>cd ..</code> qui permet de remonter au répertoire parent.</li>
+</ul>
+</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Exercice  2</p>
+<p>Se repérer dans l'arborescence:</p>
+<ol>
+<li>Remonter l'arborescence jusqu'à la racine. Donner le chemin absolu de votre répertoire personnel à partir de la racine.</li>
+<li>Se déplacer jusqu'au répertoire <code>/usr/bin</code> et lister les fichiers présents.</li>
+<li>Retourner dans le dossier personnel, puis lister les fichiers présents, en affichant les détails. Quelles sont les informations données ? Quels sont les utilisateurs recensés du système ?</li>
+</ol>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Les dossiers systèmes Linux</p>
+<p>Dans un système de type UNIX , on dispose d'une arborescence de fichiers dont la racine est <code>/</code> , puis d'un certain nombres de répertoires dont voici les principaux éléments :
+<div class="highlight"><pre><span></span><code>/
+├── bin     ← Commandes de base du système
+├── dev     ← Fichiers représentant les dispositifs matériels (devices) du système 
+├── etc     ← Fichiers de configuration du système
+├── home    ← Répertoire d&#39;accueil (HOME) des utilisateurs
+├── lib     ← Librairies                                  
+├── mnt     ← Points de montage (clés usb etc.)           
+├── proc    ← État du système et de ses processus         
+├── root    ← Répertoire de l&#39;administrateur système      
+├── run     ← Variables d&#39;état du système depuis le boot  
+├── sys     ← Informations sur le noyau et les périphériques 
+├── usr     ← Logiciels installés avec le système, base de données etc.
+└── var     ← Données fréquemment utilisées et modifiées 
+</code></pre></div></p>
+</div>
+<h3 id="33-les-utilisateurs-et-les-droits">3.3. Les utilisateurs et les droits<a class="headerlink" href="#33-les-utilisateurs-et-les-droits" title="Permanent link">⚓︎</a></h3>
+<p>En <em>Linux</em>, tout fichier, et par extension dossier, appartient à un <em>propriétaire</em> ainsi qu'à un <em>groupe</em> et un <em>utilisateur quelconque</em> ne pourra pas forcément avoir tous les droits sur un fichier qui ne lui appartient pas.</p>
+<p>Par exemple, étudions la sortie suivante donnée par la commande <code>ls -l</code> :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w"> </span>raoul<span class="w">         </span>staff<span class="w">    </span><span class="m">21359</span><span class="w"> </span><span class="m">2024</span>-06-07<span class="w"> </span><span class="m">02</span>:16<span class="w"> </span>cours.md
+drwx------@<span class="w"> </span><span class="m">887</span><span class="w"> </span>raoul<span class="w">         </span>staff<span class="w">    </span><span class="m">28384</span><span class="w">  </span><span class="m">6</span><span class="w"> </span>jui<span class="w">     </span><span class="m">22</span>:22<span class="w"> </span>Downloads
+</code></pre></div></p>
+<ul>
+<li><code>-</code> indique que l'élément trouvé est un fichier alors que <code>d</code> indique qu'il s'agit d'un dossier;</li>
+<li>les 3×3=9 lettres suivantes indiquent les droits dont disposent les différents utilisateurs sur ce fichier; </li>
+<li><code>@</code> est pour nous sans intérêt (il indique que l'existence d'<a href="https://fr.wikipedia.org/wiki/Attributs_étendus" target="_blank">attributs étendus</a>)</li>
+<li>le nombre suivant est pour nous sans intérêt (il s'agit d'un compteur de liaison) ;</li>
+<li>le groupe de lettre suivant est le nom de l'<strong>utilisateur</strong> propriétaire du fichier ou dossier ;</li>
+<li>le groupe de lettre suivant est le nom <strong>du groupe</strong> propriétaire du fichier ou dossier ;</li>
+<li><code>21359</code> et <code>28384</code> représentent respectivement la taille en octet du fichier et celle du dossier ;</li>
+<li>on trouve ensuite la date et l'heure de la dernière modification ; </li>
+<li>enfin le nom du fichier ou du dossier.</li>
+</ul>
+<div class="admonition abstact">
+<p class="admonition-title">Les utilisateurs</p>
+<p>Pour un fichier, on distinguera <strong>trois types d'utilisateurs</strong> :</p>
+<ul>
+<li><code>u</code> pour <em>user</em>, c'est-à-dire le propriétaire du fichier ;</li>
+<li><code>g</code> pour <em>group</em>, le groupe auquel appartient le fichier ;</li>
+<li><code>o</code> pour <em>other</em>, tous les autres utilisateurs.</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Super-Utilisateur</p>
+<p><img alt="image" class="center" src="../data/sandwich.png" width="30%" />
+Par défaut, il existe un <strong>super-utilisateur</strong> nommé <code>root</code> qui possède tous les droits sur un os <em>Linux</em>. </p>
+<p>Pour modifier des attributs au niveau système, il faut prendre les droits de super-utilisateur, grâce à la commande <code>sudo</code> (super-user do). Cette commande demande systématiquement à l'utilisateur faisant partie du groupe des super-utilisateurs (<em>sudoers</em>) de confirmer avec son mot de passe (celui choisi à l'installation du système) toute action de modification effectuée au niveau du système.</p>
+<p>Par exemple pour une mise à jour sous Ubuntu, on tapera les commandes suivantes : </p>
+<ul>
+<li>Mise à jour de la base de donnée des paquets systèmes :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</code></pre></div></li>
+<li>mise à jour des paquets :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade
+</code></pre></div>
+<strong>Attention ! Avec de grands pouvoirs viennent de grandes responsabilités !</strong>
+<img alt="image" class="center" src="../data/grands-pouvoirs-grandes-responsabilitc3a9s.jpg" width="30%" /></li>
+</ul>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Les droits</p>
+<p>Pour un fichier donné, on distinguera 4 permissions :</p>
+<ul>
+<li><code>r</code> : <em>read</em>, droit de lire le fichier ;</li>
+<li><code>w</code> : <em>write</em>, droit de modifier le fichier ;</li>
+<li><code>x</code> : <em>execute</em>, droit d'exécution du fichier ; </li>
+<li><code>-</code> : aucun droit sur le fichier.</li>
+</ul>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Exercice  3</p>
+<p>Quels sont les droits des utilisateurs sur le dossier Téléchargements de mon PC ?</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Attribution des permissions</p>
+<p>Pour donner ou supprimer des permissions sur un fichier <code>mon_texte.txt</code> , on utilise la commande <code>chmod</code> de la manière suivante :</p>
+<ul>
+<li>Pour donner les droits en lecture et écriture à l'utilisateur:
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>chmod<span class="w"> </span>u+rw<span class="w"> </span>mon_texte.txt
+</code></pre></div></li>
+<li>Pour supprimer les droits en modification au groupe :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>chmod<span class="w"> </span>g-w<span class="w"> </span>mon_texte.txt
+</code></pre></div></li>
+<li>Pour supprimer tous les droits aux autres utilisateurs :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>chmod<span class="w"> </span>o-rwx<span class="w"> </span>mon_texte.txt
+</code></pre></div></li>
+</ul>
+<p>Il est aussi possible d'utiliser la notation octale pour gérer ces droits. Par exemple, avec la commande suivante :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>chmod<span class="w"> </span><span class="m">640</span><span class="w"> </span>mon_texte.txt
+</code></pre></div>
+en sachant que <code>r = 4</code>, <code>w = 2</code>, <code>x = 1</code> , et que le premier chiffre correspond à l'utilisateur, le second au groupe, et le troisième aux autres. </p>
+<p>Ainsi ici :</p>
+<ul>
+<li>l'utilisateur à les droits de lecture et d'écriture (4+2 = 6) ; </li>
+<li>le groupe à le droit de lecture (4) ;</li>
+<li>les autres n'ont aucun droit (0).</li>
+</ul>
+<p>Une commande telle que <code>chmod 777 mon_texte.txt</code> done tous les droits de lecture, écriture et exécution à tous les utilisateurs du système.</p>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Exercice  4</p>
+<ol>
+<li>Copiez un fichier quelconque depuis votre session Windows vers votre session WSL par l'intermédiaire de l'explorateur de fichier de windows.</li>
+<li>Quels sont les droits sur ce fichier ?</li>
+<li>Modifiez-les de manière à ce que seul l'utilisateur principal (vous) ait des droits de lecture, écriture et exécution sur ce fichier, et que les autres n'aient qu'un droit de lecture.</li>
+</ol>
+</div>
+<h3 id="34-les-principales-commandes-shell-sous-linux">3.4. Les principales commandes Shell sous <em>Linux</em><a class="headerlink" href="#34-les-principales-commandes-shell-sous-linux" title="Permanent link">⚓︎</a></h3>
+<p>Voici, de manière non-exhaustive, quelques-unes des commandes les plus utiles sous <em>Linux</em> :</p>
+<div class="admonition info">
+<p class="admonition-title">Les principales commandes</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:15"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><input id="__tabbed_2_5" name="__tabbed_2" type="radio" /><input id="__tabbed_2_6" name="__tabbed_2" type="radio" /><input id="__tabbed_2_7" name="__tabbed_2" type="radio" /><input id="__tabbed_2_8" name="__tabbed_2" type="radio" /><input id="__tabbed_2_9" name="__tabbed_2" type="radio" /><input id="__tabbed_2_10" name="__tabbed_2" type="radio" /><input id="__tabbed_2_11" name="__tabbed_2" type="radio" /><input id="__tabbed_2_12" name="__tabbed_2" type="radio" /><input id="__tabbed_2_13" name="__tabbed_2" type="radio" /><input id="__tabbed_2_14" name="__tabbed_2" type="radio" /><input id="__tabbed_2_15" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">pwd</label><label for="__tabbed_2_2">man</label><label for="__tabbed_2_3">cat</label><label for="__tabbed_2_4">cp</label><label for="__tabbed_2_5">mv</label><label for="__tabbed_2_6">mkdir</label><label for="__tabbed_2_7">rmdir</label><label for="__tabbed_2_8">rm</label><label for="__tabbed_2_9">touch</label><label for="__tabbed_2_10">find</label><label for="__tabbed_2_11">locate</label><label for="__tabbed_2_12">grep</label><label for="__tabbed_2_13">head</label><label for="__tabbed_2_14">tail</label><label for="__tabbed_2_15">diff</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>(<strong>p</strong>rint <strong>w</strong>orking <strong>d</strong>irectory)</p>
+<ul>
+<li>Donne le chemin absolu du répertoire courant.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>man</strong>ual)</p>
+<ul>
+<li>Donne le manuel de la commande passée en argument.</li>
+</ul>
+<p>Exemple:</p>
+<ul>
+<li><code>man pwd</code>affiche le manuel de la commande <code>pwd</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(con<strong>cat</strong>enate)</p>
+<ul>
+<li>Son utilisation simple est d'afficher le contenu d'un fichier directement dans le terminal. </li>
+<li>Cependant cette commande permet bien d'autres choses :<ul>
+<li><code>cat &gt; nv_fichier.txt</code>: crée un nouveau fichier dans le répertoire courant, et le remplit avec les saisies de l'utilisateur (<code>Ctrl</code>+<code>C</code> pour quitter) ;</li>
+<li><code>cat fichier1 fichier2 &gt; fichier3</code> : concatène les contenus des fichiers 1 et 2 dans un nouveau fichier.</li>
+</ul>
+</li>
+</ul>
+<p>Remarque:</p>
+<ul>
+<li>Pour créer un fichier vide on utilise plutôt la commande <code>touch</code>.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>c</strong>o<strong>p</strong>y)</p>
+<ul>
+<li>Copie un fichier dans un dossier.</li>
+</ul>
+<p>Exemple:</p>
+<ul>
+<li><code>cp bidule.jpg /home/bob/photo</code> copie le fichier <code>bidule.jpg</code> vers le répertoire <code>/home/bob/photo</code> , si les permissions sont correctement attribuées.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>m</strong>o<strong>v</strong>e)</p>
+<ul>
+<li><strong>Déplace</strong> un fichier vers un répertoire cible, et par extension <strong>permet de renommer un fichier</strong>.</li>
+</ul>
+<p>Exemples:</p>
+<ul>
+<li><code>mv bidule.jpg /home/bob/photo</code> déplace le fichier <code>bidule.jpg</code> vers <code>/home/bob/photo</code> ; </li>
+<li><code>mv bidule.jpg truc.jpg</code> renomme le fichier <code>bidule.jpg</code> en <code>truc.jpg</code> .</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>m</strong>a<strong>k</strong>e <strong>dir</strong>ectory)</p>
+<ul>
+<li>Crée un nouveau répertoire dont le nom est passé en argument.</li>
+</ul>
+<p>Exemple:</p>
+<ul>
+<li><code>mkdir nv_dossier</code> </li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>r</strong>e<strong>m</strong>ove <strong>dir</strong>ectory)</p>
+<ul>
+<li>Supprime un répertoire <strong>vide</strong> dont le nom est passé en argument.</li>
+</ul>
+<p>Exemple: </p>
+<ul>
+<li><code>rmdir nom_dossier</code> </li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>r</strong>e<strong>m</strong>ove)</p>
+<ul>
+<li>Supprime le ou les fichiers passés en arguments.</li>
+</ul>
+<p><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/26a0.svg" title=":warning:" /> <strong>Attention à cette commande qui peut tout casser</strong> <img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@14.1.2/assets/svg/26a0.svg" title=":warning:" /></p>
+<p>Exemples:</p>
+<ul>
+<li><code>rm mon_fichier</code>: supprime <code>mon_fichier</code> </li>
+<li><code>rm *</code> : supprime tous les fichiers du répertoire courant !</li>
+<li><code>rm -R</code>: supprime de manière récursive tous les fichiers et sous-dossiers du répertoire courant !!!</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Permet de créer un <strong>nouveau fichier vide</strong> en lui passant le nom en argument. Ce n'est pas la peine d'utiliser la commande <code>cat</code> pour créer un fichier vide.</li>
+</ul>
+<p>Exemple:</p>
+<ul>
+<li><code>touch nv_fichier</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Permet de chercher des fichiers et/ou des dossiers dans un dossier donné. </li>
+</ul>
+<p>Exemple:</p>
+<ul>
+<li><code>find /home/ -name mon_texte.txt</code> :  cherche le fichier <code>mon_texte.txt</code> dans le répertoire <code>home</code> et tous ses sous-dossiers.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Permet de donner la localisation d'un fichier dans le système de fichier.</p>
+<p>Remarques: </p>
+<ul>
+<li>Le résultat de la commande <code>locate</code> est très rapide à obtenir, car elle utilise une base de donnée mise à jour régulièrement qui recense tous les fichiers du système. Cependant, la mise à jour de cette base de donnée n'est pas immédiate, donc les modifications récentes ne sont pas prises en compte.</li>
+<li>Si l'on a les droits super-utilisateur on peut mettre à jour la base de données avec la commande <code>sudo updatedb</code>.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>(<strong>G</strong>lobal <strong>R</strong>egular <strong>E</strong>xpression <strong>P</strong>rint)</p>
+<ul>
+<li>Permet de chercher une chaîne de caractère dans un fichier. Ce qui est déjà utile mais cette commande  permet aussi aux utilisateurs de spécifier des modèles à l'aide d'expressions régulières, puis de rechercher des lignes qui leur correspondent. Ce qui en fait un outil très puissant.</li>
+</ul>
+<p>Syntaxe:</p>
+<ul>
+<li><code>grep [options] modèle [fichier...]</code></li>
+</ul>
+<p>Exemples:</p>
+<ul>
+<li><code>grep "toto" bob.txt</code> utilisation basique qui renverra toutes les lignes du fichier <code>bob.txt</code> contenant la chaîne <code>toto</code>. </li>
+<li><code>grep "linux" /path/to/directory/*</code> renverra toutes les lignes contenant la chaîne <code>linux</code> dans les différents fichiers du répertoire indiqué.</li>
+<li><code>grep -i "important" /path/to/directory/*</code> où l'option <code>-i</code> permet de rendre la recherche insensible à la <a href="https://fr.wikipedia.org/wiki/Casse_(typographie)#:~:text=La%20casse%20est%20généralement%20régie,généralisée%20pour%20tous%20les%20substantifs." target="_blank">casse</a>.</li>
+<li><code>grep -c "pattern" /path/to/directory/*</code> où l'option <code>-c</code> permet de compter le nombre d'occurences.</li>
+<li><code>grep -r "pattern" /path/to/directory/</code> où l'option <code>-r</code>permet de chercher de façon récursive dans les sous-dossiers.</li>
+</ul>
+<p>Remarque: <code>grep</code> est très efficace sur les fichiers comptenant du texte, mais ne fonctionne pas correctement sur les fichiers pdf, odt ...</p>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Renvoie les 10 premières lignes d'un fichier. </li>
+<li>On peut paramétrer le nombre de lignes obtenues avec l'option <code>-n</code></li>
+</ul>
+<p>Exemple:</p>
+<ul>
+<li><code>head -n 5 bob.txt</code> envoie les 5 premières lignes du fichier <code>bob.txt</code>.</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<p>Fonctionne de la même manière que <code>head</code> , mais en renvoyant les 10 dernières lignes.</p>
+</div>
+<div class="tabbed-block">
+<p>Compare deux fichiers ligne par ligne et renvoie toutes celles présentant une différence. Pratique!</p>
+</div>
+</div>
+</div>
+</div>
+<div class="admonition abstract">
+<p class="admonition-title">Exercice  5</p>
+<ol>
+<li>Télécharger le fichier <a href="../data/Arborescence.tar.gz" target="_blank">Arborescence.tar.gz</a></li>
+<li>Créer un dossier <code>TP</code> dans le dossier personnel </li>
+<li>Copier le fichier précédent dans ce dossier, puis le décompresser avec la commande 
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>tar<span class="w"> </span>-xzf<span class="w"> </span>Arborescence.tar.gz
+</code></pre></div>
+Attention, la décompression peut durer plusieurs minutes.</li>
+<li>Vous aurez besoin de la commande <code>locate</code> qui n'est pas installée. Exécutez la commande suivante pour installer le paquet nécessaire à son utilisation :
+<div class="highlight"><span class="filename">Bash</span><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>plocate
+</code></pre></div></li>
+<li>Pour débuter, chercher le fichier <code>commencement.txt</code>   dans l'arborescence, et le lire ! Bon courage, vous aurez probablement à chercher en parallèle sur des commandes spécifiques avec les options qui vont bien pour parvenir à la fin de ce TP ! (Petit point de détail, si une commande vous semble trop longue, vous pouvez l'interrompre avec le raccourci clavier <code>Ctrl</code>+<code>C</code>).</li>
+</ol>
+</div>
+
+
+
+
+
+                
+    <script src="../../../js/ide.js"></script> 
+
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page" >
+      
+        
+        <a href="../../sommaire/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Sommaire" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Sommaire
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../5.1_Systemes_sur_puce/cours/" class="md-footer__link md-footer__link--next" aria-label="Suivant: 5.1 Systèmes sur puce" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              5.1 Systèmes sur puce
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "toc.integrate", "header.autohide", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.37e9125f.min.js"></script>
+      
+        <script src="../../../xtra/config.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="../../../xtra/interpreter.js"></script>
+      
+    
+  </body>
+</html>
